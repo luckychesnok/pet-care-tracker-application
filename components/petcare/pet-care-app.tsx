@@ -1,6 +1,6 @@
 "use client"
 
-import { PawPrint, Pill, Syringe } from "lucide-react"
+import { PawPrint, Pill, Syringe, Scissors } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getVaccineStatus } from "@/lib/petcare/dates"
 import { PetCareProvider, usePetCare } from "@/lib/petcare/store"
@@ -9,6 +9,7 @@ import { MedicationPanel } from "./medications/medication-panel"
 import { PetProfileCard } from "./profile/pet-profile-card"
 import { SummaryStrip } from "./summary-strip"
 import { VaccinationPanel } from "./vaccinations/vaccination-panel"
+import  GroomingPanel from "./grooming/grooming-panel"
 
 export function PetCareApp() {
   return (
@@ -81,7 +82,11 @@ function ModuleTabs() {
             </span>
           )}
         </TabsTrigger>
-      </TabsList>
+        <TabsTrigger value="grooming" className="px-3">
+            <Scissors className="h-4 w-4 mr-1.5" aria-hidden="true" />
+            Grooming
+          </TabsTrigger>
+        </TabsList>
       <TabsContent value="profile">
         <PetProfileCard />
       </TabsContent>
@@ -90,6 +95,9 @@ function ModuleTabs() {
       </TabsContent>
       <TabsContent value="vaccinations">
         <VaccinationPanel />
+      </TabsContent>
+      <TabsContent value="grooming">
+      <GroomingPanel />
       </TabsContent>
     </Tabs>
   )
