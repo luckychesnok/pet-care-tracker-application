@@ -11,6 +11,12 @@ export type Pet = {
   weight: number
   weightUnit: WeightUnit
   avatarUrl: string | null
+  // Новые поля для расширенного профиля:
+  microchipId?: string
+  allergies?: string[]
+  chronicConditions?: string[]
+  ownerPhone?: string
+  ownerEmail?: string
 }
 
 export type DoseStatus = "given" | "skipped" | "missed"
@@ -44,4 +50,23 @@ export type ReminderLeadDay = 30 | 7 | 1
 export type ReminderSettings = {
   enabled: boolean
   leadDays: Record<ReminderLeadDay, boolean>
+}
+
+// Тип для кормления
+export type Feeding = {
+  id: string
+  petId: string
+  foodName: string
+  dosage: string
+  appetite: 'Отличный' | 'Сниженный' | 'Отказ'
+  time: string
+}
+
+// Тип для груминга и ухода
+export type GroomingRecord = {
+  id: string
+  petId: string
+  title: string
+  eventDate: string
+  notes: string
 }

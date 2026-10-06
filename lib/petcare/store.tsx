@@ -20,6 +20,9 @@ type PetCareContextValue = {
   loading: boolean
   error: string | null
   pet: Pet
+  pets: Pet[]
+  setPetId: (id: string) => void
+  addPet: (petData: Partial<Pet>) => Promise<Pet>
   updatePet: (pet: Pet) => Promise<void>
   medications: Medication[]
   addMedication: (medication: NewMedication) => Promise<void>
@@ -54,6 +57,7 @@ function replaceById<T extends { id: string }>(items: T[], next: T) {
 export function PetCareProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [pets, setPets] = useState<Pet[]>([])
   const [pet, setPet] = useState<Pet>(emptyPet)
   const [medications, setMedications] = useState<Medication[]>([])
   const [vaccines, setVaccines] = useState<Vaccine[]>([])
@@ -69,7 +73,9 @@ export function PetCareProvider({ children }: { children: React.ReactNode }) {
       try {
         const lists = await fetchCareLists()
         if (cancelled) return
-        setPet(lists.pets[0] ?? emptyPet())
+        const loadedPets = lists.pets.length > 0 ? lists.pets : [emptyPet()]
+        setPets(loadedPets)
+        setPet(loadedPets[0])
         setMedications(lists.medications)
         setVaccines(lists.vaccines)
         setError(null)
@@ -87,6 +93,28 @@ export function PetCareProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const setPetId = useCallback(
+    (id: string) => {
+      const found = pets.find((p) => p.id === id)
+      if (found) {
+        setPet(found)
+      }
+    },
+    [pets],
+  )
+
+  const addPet = useCallback(async (petData: Partial<Pet>) => {
+    const newRecord: Pet = {
+      ...emptyPet(),
+      ...petData,
+      id: "", // Очищаем ID, чтобы API понял, что это новый питомец и вызвал insertPet
+    }
+    const saved = await updatePetRecord(newRecord as any) 
+    setPets((prev) => [...prev, saved])
+    setPet(saved)
+    return saved
+  }, [])
+
   const ensureSavedPet = useCallback(async (current: Pet) => {
     if (current.id) return current
     const saved = await updatePetRecord(current)
@@ -97,6 +125,7 @@ export function PetCareProvider({ children }: { children: React.ReactNode }) {
   const updatePet = useCallback(async (next: Pet) => {
     const saved = await updatePetRecord({ ...next, id: next.id || pet.id })
     setPet(saved)
+    setPets((prev) => replaceById(prev, saved))
   }, [pet.id])
 
   const addMedication = useCallback(
@@ -142,6 +171,9 @@ export function PetCareProvider({ children }: { children: React.ReactNode }) {
       loading,
       error,
       pet,
+      pets,
+      setPetId,
+      addPet,
       updatePet,
       medications,
       addMedication,
@@ -158,6 +190,9 @@ export function PetCareProvider({ children }: { children: React.ReactNode }) {
       loading,
       error,
       pet,
+      pets,
+      setPetId,
+      addPet,
       medications,
       vaccines,
       reminders,

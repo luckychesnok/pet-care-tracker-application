@@ -1,8 +1,8 @@
 import type { DoseStatus, Medication, Pet, Vaccine, WeightUnit } from "@/lib/petcare/types"
 import { supabase } from "./supabaseClient"
 
-export type NewMedication = Omit<Medication, "id" | "lastLog">
-export type NewVaccine = Omit<Vaccine, "id">
+export type NewMedication = Omit<Medication, "id" | "lastLog" | "petId">
+export type NewVaccine = Omit<Vaccine, "id" | "petId">
 export type PetInput = Omit<Pet, "id"> & { id?: string }
 
 type PetRow = {
@@ -70,10 +70,12 @@ export function mapPet(row: PetRow): Pet {
   }
 }
 
-export function mapMedication(row: MedicationRow): Medication {
+export function mapMedication(row: MedicationRow): Medication & { pet_id?: string | null } {
   const status = asDoseStatus(row.status)
   return {
     id: row.id,
+    pet_id: row.pet_id, // 👈 Сохраняем pet_id, чтобы компоненты могли по нему фильтровать
+    petId: row.pet_id,  // дублируем на случай проверки petId
     name: row.name,
     dosage: row.dosage,
     frequency: row.frequency ?? "Once daily",
@@ -83,17 +85,19 @@ export function mapMedication(row: MedicationRow): Medication {
       status && row.logged_at
         ? { status, date: datePart(row.logged_at, ""), time: row.logged_at }
         : null,
-  }
+  } as any
 }
 
-export function mapVaccine(row: VaccinationRow): Vaccine {
+export function mapVaccine(row: VaccinationRow): Vaccine & { pet_id?: string | null } {
   return {
     id: row.id,
+    pet_id: row.pet_id, // 👈 Сохраняем pet_id для вакцин
+    petId: row.pet_id,
     name: row.vaccine_name,
     administeredDate: datePart(row.administered_date, ""),
     vetName: row.vet_name ?? "",
     nextDueDate: datePart(row.next_due_date, ""),
-  }
+  } as any
 }
 
 export async function fetchPets(): Promise<Pet[]> {

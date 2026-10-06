@@ -126,7 +126,7 @@ function MedicationForm({ onDone }: { onDone: () => void }) {
       </div>
       <DialogFooter>
         <DialogClose render={<Button type="button" variant="outline" />}>Cancel</DialogClose>
-        <Button type="submit">Add medication</Button>
+        <Button type="submit"className="bg-[#00bfff] text-white hover:bg-[#0099cc]">Add medication</Button>
       </DialogFooter>
     </form>
   )

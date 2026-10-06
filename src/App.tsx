@@ -1,3 +1,7 @@
-"use client"
+"use client";
 
-export { PetCareApp as default } from "@/components/petcare/pet-care-app"
+import { PetCareApp } from "@/components/petcare/pet-care-app";
+
+export default function Page() {
+  return <PetCareApp />;
+}
