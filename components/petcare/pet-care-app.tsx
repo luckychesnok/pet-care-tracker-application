@@ -9,7 +9,7 @@ import { MedicationPanel } from "./medications/medication-panel"
 import { PetProfileCard } from "./profile/pet-profile-card"
 import { SummaryStrip } from "./summary-strip"
 import { VaccinationPanel } from "./vaccinations/vaccination-panel"
-import GroomingPanel from "./grooming/grooming-panel"
+import {GroomingPanel} from "./grooming/grooming-panel"
 import { ReminderCard } from "./reminders/reminder-card"
 
 export function PetCareApp() {
@@ -152,8 +152,6 @@ function ModuleTabs() {
   const { medications, vaccines, grooming, pet } = usePetCare()
   const currentPetId = pet?.id
   const [activeTab, setActiveTab] = useState("profile")
-  console.log("ТЕКУЩИЙ ПИТОМЕЦ В TABS:", pet);
-  console.log("ВСЕ МЕДИКАМЕНТЫ В СТОРЕ:", medications);
   // Считаем лекарства строго для текущего питомца по pet_id
 const petMedications = medications.filter((m: any) => {
     const itemPetId = String(m.pet_id ?? m.petId ?? "").trim();
