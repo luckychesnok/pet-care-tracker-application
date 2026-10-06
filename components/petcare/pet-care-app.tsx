@@ -9,7 +9,7 @@ import { MedicationPanel } from "./medications/medication-panel"
 import { PetProfileCard } from "./profile/pet-profile-card"
 import { SummaryStrip } from "./summary-strip"
 import { VaccinationPanel } from "./vaccinations/vaccination-panel"
-import {GroomingPanel} from "./grooming/grooming-panel"
+import { GroomingPanel } from "./grooming/grooming-panel"
 import { ReminderCard } from "./reminders/reminder-card"
 
 export function PetCareApp() {

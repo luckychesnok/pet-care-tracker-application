@@ -1,5 +1,7 @@
-import { PetCareAppLoader } from "@/components/petcare/pet-care-app-loader"
+"use client";
+
+import { PetCareAppLoader } from "@/components/petcare/pet-care-app-loader";
 
 export default function Page() {
-  return <PetCareAppLoader />
+  return <PetCareAppLoader />;
 }
